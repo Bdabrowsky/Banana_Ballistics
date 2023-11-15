@@ -10,7 +10,7 @@ void motor::init(){
     grain temp;
     temp.init(0.1,0.05,0.015);
    
-    grains.push_back(temp);
+    grains.push_back(temp);   
 
     grains[0].prop.a = 0.000101;
     grains[0].prop.n = 0.319000;

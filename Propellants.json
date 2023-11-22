@@ -1,0 +1,14 @@
+{
+  "KNSB": {
+    "a": "0.0001",
+    "n": "0.17",
+    "density": "1700",
+    "specific_heat_ratio": "1.2",
+    "combustion_temp": "1700.0",
+    "exhaust_molar_mass": "1",
+    "alpha": "0",
+    "beta": "0",
+    "max_pressure": "0",
+    "double": {}
+  }
+}

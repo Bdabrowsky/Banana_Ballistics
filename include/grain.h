@@ -20,6 +20,7 @@ class grain{
         double mass_flux;
         double mass_flow;
         double burn_rate;
+        double max_mass_flux;
 
         propellant prop;
 

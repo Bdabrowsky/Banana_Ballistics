@@ -1,8 +1,6 @@
 #pragma once
+#include<string>
 
-typedef struct{
 
-
-}output_data_t;
-
+void write(string str);
 

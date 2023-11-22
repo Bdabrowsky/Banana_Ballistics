@@ -12,4 +12,6 @@ class nozzle{
         double erosion_coef;
         double buildup_coef;
 
+        void update();
+
 };

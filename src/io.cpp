@@ -1,6 +1,23 @@
 #include<fstream>
+#include<string>
+
 
 using namespace std;
 
 
-ofstream output("output.csv");
+ofstream output;
+
+void init(){
+   
+   
+}
+
+void write(string str){
+    
+   
+
+}
+
+void close(){
+   
+}

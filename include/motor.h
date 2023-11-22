@@ -20,8 +20,10 @@ class motor{
         double pressure_exit;
         double thrust;
         double thrust_coeffcient;
+
         double impulse;
         double specific_impulse;
+        double max_pressure;
 
         double kn;
 

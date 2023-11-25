@@ -1,11 +1,19 @@
 #include<cinttypes>
 #include<math.h>
 #include<stdio.h>
+#include <nlohmann/json.hpp>
+#include<string.h>
 
 #include "config.h"
 #include "motor.h"
 #include "grain.h"
 #include "propellant.h"
+
+
+
+
+using json = nlohmann::json;
+
 
 using namespace std;
 
@@ -28,5 +36,6 @@ int main(){
     }
 
     mot.parse();
+   
 
 }

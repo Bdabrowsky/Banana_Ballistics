@@ -1,21 +1,8 @@
-# Make an explicit list of all source files in `CMakeDemo_SRC`. This is important
-# because CMake is not a build system: it is a build system generator. Suppose
-# you add a file foo.cpp to src/ after running "cmake ..". If you set
-# `CMakeDemo_SRC` with `file(GLOB ... )`, this change is not passed to the makefile;
-# the makefile doesn't know that foo.cpp exists and will not re-run cmake. Your
-# collaborator's builds will fail and it will be unclear why. Whether you use
-# file(GLOB ...) or not, you will need to re-run cmake, but with an explicit
-# file list, you know beforehand why your code isn't compiling. 
-set(CMakeDemo_SRC
-    main.cpp
-    grain.cpp
-    io.cpp
-    motor.cpp
-    nozzle.cpp
-    propellant.cpp
-)
+add_executable(Banana_Ballisticse main.cpp) # The main executable
+#add_library(Project-Name-lib hello_world.cpp factorial.cpp) # A library for tests
 
-# Form the full path to the source files...
-PREPEND(CMakeDemo_SRC)
-# ... and pass the variable to the parent scope.
-set(CMakeDemo_SRC ${CMakeDemo_SRC}  PARENT_SCOPE)
+#SET_TARGET_PROPERTIES(Project-Name-lib PROPERTIES PREFIX "") # Remove the lib prefix
+
+#target_link_libraries(Project-Name Project-Name-lib) # Link our sources to the executable
+
+install(Banana_Ballistics DESTINATION bin)

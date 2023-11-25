@@ -10,7 +10,7 @@
 #define gas_constant 8314 //J/kg-k 
 
 #define gravity 9.81 // m / s^2
-#define e 2.71
+//#define e 2.71
 #define PI 3.141592
 
 

@@ -33,7 +33,10 @@ int main(){
         if(mot.grains[0].web <= 0.001){
             break;
         }
-        printf("Time: %0.3lf s   ", T);
+
+        ofstream temp("output.csv", ios::out | std::ofstream::app);
+        temp << T << ",";
+        temp.close();
     }
 
     mot.parse();

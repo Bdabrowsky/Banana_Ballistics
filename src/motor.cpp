@@ -1,9 +1,11 @@
 #include "motor.h"
 #include "config.h"
+#include "io.h"
 
-
-#include<stdio.h>
-#include<math.h>
+#include <stdio.h>
+#include <math.h>
+#include <string>
+#include <iomanip>  
 
 void motor::init(){
     //temp init
@@ -92,17 +94,20 @@ void motor::update(){
     if(pressure >= max_pressure){
         max_pressure = pressure;
     }
+    
 
-    printf("Pressure: %0.2lf MPa    ", pressure/1000000.0);
-    printf("Thrust: %0.2lf N    ", thrust);
-    printf("Web left: %0.4lf m    ", grains[0].web);
-    for(unsigned long i=0;i<grains.size();i++){
-        printf("Grain %d mass flux: %0.4lf kg/m^2-s    ", i, grains[i].mass_flux);
-        printf("Grain %d mass flow: %0.4lf kg/s    ", i, grains[i].mass_flow);
+    ofstream temp("output.csv", ios::out | std::ofstream::app);
+    temp << setprecision(5) << pressure/1000000.0 << ",";
+    temp << setprecision(5) << thrust << ",";
+    for(auto i=0;i<grains.size();i++){
+        temp << setprecision(5) << grains[i].web << ",";
+        temp << setprecision(5) << grains[i].mass_flow << ",";
+        temp << setprecision(5) << grains[i].mass_flux << ",";
     }
-    printf("Kn: %0.2lf ", kn);
-    printf("Regression rate: %lf m/s \n", grains[0].burn_rate);
-
+    temp << setprecision(5) << kn << ",";
+    temp << setprecision(5) << grains[0].burn_rate << "\n";
+    
+    temp.close();
 
 }
 

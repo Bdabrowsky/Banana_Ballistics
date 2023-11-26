@@ -39,7 +39,7 @@ void grain::update(double pressure){
     //printf("%lf", (port_diameter));
     web = (diameter - port_diameter) / 2.0;
 
-    mass_flow = area * burn_rate * prop.density;
+    mass_flow += area * burn_rate * prop.density;
     mass_flux = mass_flow / (port_diameter * port_diameter * PI / 4.0);
 
     if(mass_flux >= max_mass_flux){

@@ -12,14 +12,6 @@ void motor::init(){
    
     
     temp.init(0.125,0.068,0.03);
-    temp.prop.a = 0.000101;
-    temp.prop.n = 0.319000;
-    temp.prop.alpha = 0.0;
-    temp.prop.beta = 0.0;
-    temp.prop.combustion_temp = 1720.0;
-    temp.prop.density = 1820.23;
-    temp.prop.exhaust_molar_mass = 41.98;
-    temp.prop.specific_heat_ratio = 1.133000;
     temp.prop.init();
 
     for(auto i=0;i<6;i++){
@@ -27,17 +19,17 @@ void motor::init(){
     }
     
     pressure = 200000;
-    for(auto i=0;i<grains.size();i++){
+    for(unsigned long i=0;i<grains.size();i++){
         total_volume += grains[i].volume_initial;
     }
     
     pressure_exit = ambient_pressure;
-    correction_coeff = 1.0;
+    correction_coeff = 0.92;
 
     nozz.expansion_ratio = 5.0;
     nozz.throat_diameter = 0.024;
 
-    for(auto i=0;i<grains.size();i++){
+    for(unsigned long i=0;i<grains.size();i++){
         volume += grains[i].length_initial * grains[i].diameter * grains[i].diameter * PI / 4.0;
     }
 
@@ -49,8 +41,15 @@ void motor::update(){
     double temp_area = 0.0;
 
     
-    for(auto i=0;i<grains.size();i++){
+    for(unsigned long i=0;i<grains.size();i++){
+        if(i>0){
+            grains[i].mass_flow = grains[i-1].mass_flow;
+        }
+        else{
+            grains[i].mass_flow = 0;
+        }
         grains[i].update(pressure);
+        
 
         temp_volume += grains[i].volume;
         temp_area += grains[i].area;
@@ -97,7 +96,10 @@ void motor::update(){
     printf("Pressure: %0.2lf MPa    ", pressure/1000000.0);
     printf("Thrust: %0.2lf N    ", thrust);
     printf("Web left: %0.4lf m    ", grains[0].web);
-    printf("Mass flux: %0.4lf kg/m^2-s    ", grains[0].mass_flux);
+    for(unsigned long i=0;i<grains.size();i++){
+        printf("Grain %d mass flux: %0.4lf kg/m^2-s    ", i, grains[i].mass_flux);
+        printf("Grain %d mass flow: %0.4lf kg/s    ", i, grains[i].mass_flow);
+    }
     printf("Kn: %0.2lf ", kn);
     printf("Regression rate: %lf m/s \n", grains[0].burn_rate);
 
@@ -107,14 +109,21 @@ void motor::update(){
 void motor::parse(){
 
     double total_propellant_mass = 0.0;
-    for(auto i=0;i<grains.size();i++){
+    for(unsigned long i=0;i<grains.size();i++){
         total_propellant_mass += grains[i].volume_initial * grains[i].prop.density;
     }
 
     specific_impulse = impulse / (total_propellant_mass * gravity);
     printf("Impulse: %0.2lf Ns\n", impulse);
     printf("Peak pressure: %0.2lf MPa \n", max_pressure/1000000.0);
-    printf("Peak mass flux: %0.2lf kg/m^s-s\n", grains[0].max_mass_flux);
+    double mx=0.0;
+    for(unsigned long i=0;i<grains.size();i++){
+        if(grains[i].max_mass_flux > mx){
+            mx = grains[i].max_mass_flux;
+        }
+    }
+    printf("Peak mass flux: %0.2lf kg/m^s-s\n", mx);
+    printf("Propellant mass: %lf\n", total_propellant_mass);
     printf("Isp: %0.1lf s \n", specific_impulse);
 
 }

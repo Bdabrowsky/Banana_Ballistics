@@ -29,12 +29,3 @@ void io_write(string str){
     temp.close();
 
 }
-
-json read_propellant(){
-    ifstream temp("data/Propellants.json");
-    json propellants = json::parse(temp);
-
-    std::cout << std::setw(4) << propellants << '\n';
-
-    return propellants;
-}

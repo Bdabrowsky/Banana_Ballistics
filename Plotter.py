@@ -17,17 +17,13 @@ csvList = []
 
 cnt = 0
 
-with open("LOG.csv", 'r') as csvfile:
+with open("output.csv", 'r') as csvfile:
     lines = csv.reader(csvfile, delimiter=',')
-    if cnt != 0:
-        for row in lines:
-                x.append(float(row[0]))
-                P.append(float(row[1]))
-                F.append(float(row[2]))
-                print(float(row[0]))   
-    cnt += 1
-    print(cnt)
-
+    for row in lines:
+        x.append(float(row[0]))
+        P.append(float(row[1]))
+        F.append(float(row[2]))
+    
 
 
 plt.style.use('dark_background')

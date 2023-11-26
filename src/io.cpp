@@ -1,23 +1,40 @@
-#include<fstream>
-#include<string>
+#include "io.h"
 
+#include <fstream>
+#include <string>
+#include <nlohmann/json.hpp>
+#include <iostream>
 
 using namespace std;
+using json = nlohmann::json;
 
 
-ofstream output;
+const string filename = "output.csv";
 
-void init(){
-   
-   
+void io_init(){
+   ofstream temp(filename, ios::out | ios::trunc);
+
+   string s = "Timestamp,Pressure,Thrust,Kn\n";
+
+   temp << s;
+
+   temp.close();
 }
 
-void write(string str){
-    
-   
+void io_write(string str){
+    ofstream temp(filename, ios::out | std::ofstream::app);
+
+    temp << str;
+
+    temp.close();
 
 }
 
-void close(){
-   
+json read_propellant(){
+    ifstream temp("data/Propellants.json");
+    json propellants = json::parse(temp);
+
+    std::cout << std::setw(4) << propellants << '\n';
+
+    return propellants;
 }

@@ -1,6 +1,15 @@
 #pragma once
-#include<string>
 
+#include <string>
+#include <fstream>
+#include <nlohmann/json.hpp>
 
-void write(string str);
+using json = nlohmann::json;
 
+using namespace std;
+
+void io_write(string str);
+
+json read_propellant();
+
+void io_init();

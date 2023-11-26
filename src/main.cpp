@@ -8,6 +8,7 @@
 #include "motor.h"
 #include "grain.h"
 #include "propellant.h"
+#include "io.h"
 
 
 
@@ -24,7 +25,7 @@ motor mot;
 
 int main(){
 
-    
+   
     mot.init();
 
     for(double T=0;T<simulationLength;T+=dT){
@@ -37,5 +38,6 @@ int main(){
 
     mot.parse();
    
+  
 
 }

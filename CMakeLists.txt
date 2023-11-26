@@ -6,7 +6,7 @@ set_property          (GLOBAL PROPERTY USE_FOLDERS ON)
 set                   (CMAKE_BUILD_TYPE Release)
 set                   (CMAKE_CXX_STANDARD 17)
 cmake_policy(SET CMP0135 OLD)
-
+set (CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
 
 
 if   (MSVC)

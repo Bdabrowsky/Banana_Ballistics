@@ -19,3 +19,9 @@ I included simple python plotter to analyze result data. To use it just type:
 python3 Plotter.py
 ```
 Be aware that plotter requires csv an matplotlib to run.
+
+## Sources
+ [Open Motor](https://github.com/reilleya/openMotor)
+ [Richard Nakka](https://www.nakka-rocketry.net/th_pres.html)
+ [Parameters Affecting the Erosive Burning of Solid Rocket Motor](https://www.matec-conferences.org/articles/matecconf/pdf/2018/12/matecconf_icmme2018_03001.pdf)
+ [SOLID ROCKET MOTORS INTERNAL BALLISTIC MODEL WITH EROSIVE AND CONDENSED PHASE CONSIDERATIONS](https://amme.journals.ekb.eg/article_34725_63cd48d03bd8dda10d9a74a114ec8b51.pdf)

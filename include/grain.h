@@ -2,6 +2,9 @@
 
 #include"propellant.h"
 
+#include <string>
+
+
 using namespace std;
 
 class grain{
@@ -9,6 +12,8 @@ class grain{
         double diameter;    //m
         double length;      //m
         double port_diameter; //m
+
+        string propellant_type;
 
         double volume;      //m^3
         double area;        //m^2

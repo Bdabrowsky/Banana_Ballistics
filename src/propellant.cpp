@@ -15,7 +15,7 @@ void propellant::init(){
     ifstream temp("data/Propellants.json");
     json propellants = json::parse(temp);
 
-    cout << setw(4) << propellants << '\n';
+    //cout << setw(4) << propellants << '\n';
     
     density = propellants.at("KNSB").at("density");
     specific_heat_ratio = propellants.at("KNSB").at("specific_heat_ratio");
@@ -28,6 +28,7 @@ void propellant::init(){
     max_pressure = propellants.at("KNSB").at("max_pressure");
     min_pressure = propellants.at("KNSB").at("min_pressure");
 
+    temp.close();
     
 
     tau = sqrt(specific_heat_ratio) * pow( (2.0 / (specific_heat_ratio + 1.0)), (specific_heat_ratio + 1.0) / (2.0 * (specific_heat_ratio - 1.0)));

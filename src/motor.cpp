@@ -1,23 +1,35 @@
 #include "motor.h"
 #include "config.h"
 #include "io.h"
-
+ 
 #include <stdio.h>
 #include <math.h>
 #include <string>
-#include <iomanip>  
+#include <iomanip>
+#include <nlohmann/json.hpp>
+#include <fstream>
+
+
+using namespace std;
+
 
 void motor::init(){
-    //temp init
-    grain temp;
-    
+    ifstream temp("data/configuration.json");
+    json config = json::parse(temp);
    
-    
-    temp.init(0.125,0.068,0.03);
-    temp.prop.init();
+    int cnt = config.at("motor").at("grain_count");
+    printf("%d\n", cnt);
+    for(auto i=0;i<cnt;i++){
+        grain tempGrain;
 
-    for(auto i=0;i<6;i++){
-        grains.push_back(temp);   
+        tempGrain.diameter = config.at("motor").at("grains").at(i).at("diameter");
+        tempGrain.length = config.at("motor").at("grains").at(i).at("length");
+        tempGrain.port_diameter = config.at("motor").at("grains").at(i).at("port_diameter");
+        tempGrain.propellant_type = config.at("motor").at("grains").at(i).at("propellant_type");
+        printf("%lf, %lf, %lf\n",tempGrain.diameter, tempGrain.length, tempGrain.port_diameter);
+        tempGrain.init(tempGrain.length,  tempGrain.diameter,  tempGrain.port_diameter);
+        tempGrain.prop.init();
+        grains.push_back(tempGrain);   
     }
     
     pressure = 200000;
@@ -26,15 +38,22 @@ void motor::init(){
     }
     
     pressure_exit = ambient_pressure;
-    correction_coeff = 0.92;
 
-    nozz.expansion_ratio = 5.0;
-    nozz.throat_diameter = 0.024;
+
+    correction_coeff = config.at("motor").at("correction_coeff");
+
+    nozz.throat_diameter = config.at("motor").at("nozzle").at("throat_diameter");
+    nozz.expansion_ratio = config.at("motor").at("nozzle").at("expansion_ratio");
+    nozz.angle_div = config.at("motor").at("nozzle").at("angle_div");
+    nozz.angle_conv = config.at("motor").at("nozzle").at("angle_conv");
+    nozz.erosion_coef = config.at("motor").at("nozzle").at("erosion_coef");
+    nozz.buildup_coef = config.at("motor").at("nozzle").at("buildup_coef");
 
     for(unsigned long i=0;i<grains.size();i++){
         volume += grains[i].length_initial * grains[i].diameter * grains[i].diameter * PI / 4.0;
     }
 
+    temp.close();
 }
 
 void motor::update(){
@@ -43,7 +62,7 @@ void motor::update(){
     double temp_area = 0.0;
 
     
-    for(unsigned long i=0;i<grains.size();i++){
+    for(auto i=0;i<grains.size();i++){
         if(i>0){
             grains[i].mass_flow = grains[i-1].mass_flow;
         }
@@ -114,7 +133,7 @@ void motor::update(){
 void motor::parse(){
 
     double total_propellant_mass = 0.0;
-    for(unsigned long i=0;i<grains.size();i++){
+    for(auto i=0;i<grains.size();i++){
         total_propellant_mass += grains[i].volume_initial * grains[i].prop.density;
     }
 
@@ -122,7 +141,7 @@ void motor::parse(){
     printf("Impulse: %0.2lf Ns\n", impulse);
     printf("Peak pressure: %0.2lf MPa \n", max_pressure/1000000.0);
     double mx=0.0;
-    for(unsigned long i=0;i<grains.size();i++){
+    for(auto i=0;i<grains.size();i++){
         if(grains[i].max_mass_flux > mx){
             mx = grains[i].max_mass_flux;
         }

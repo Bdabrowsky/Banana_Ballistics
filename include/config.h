@@ -1,6 +1,6 @@
 #pragma once
 
-#define dT 0.00001 //Timestep in s
+#define dT 0.0001 //Timestep in s
 #define simulationLength 10.0 //Simulation length in s
 
 

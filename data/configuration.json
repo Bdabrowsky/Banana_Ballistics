@@ -1,0 +1,27 @@
+{
+    "motor":
+    {
+        "grain_count": 6,
+        "grains":
+        [
+            {"diameter": 0.068, "length":0.125, "port_diameter":0.03, "propellant_type":"KNSB"},
+            {"diameter": 0.068, "length":0.125, "port_diameter":0.03, "propellant_type":"KNSB"},
+            {"diameter": 0.068, "length":0.125, "port_diameter":0.03, "propellant_type":"KNSB"},
+            {"diameter": 0.068, "length":0.125, "port_diameter":0.03, "propellant_type":"KNSB"},
+            {"diameter": 0.068, "length":0.125, "port_diameter":0.03, "propellant_type":"KNSB"},
+            {"diameter": 0.068, "length":0.125, "port_diameter":0.03, "propellant_type":"KNSB"}
+        ],
+
+        "nozzle":
+        {
+            "throat_diameter": 0.024,
+            "expansion_ratio": 4,
+            "angle_div": 17,
+            "angle_conv": 60,
+            "erosion_coef": 0,
+            "buildup_coef": 0
+        },
+
+        "correction_coeff": 0.92
+    }
+}

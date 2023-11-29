@@ -1,7 +1,7 @@
 # Banana_Ballistics - internal ballistics silmulator for solid rocket motors
 
 ## Installing
-To install this software you must install CMake \n
+To install this software you must install CMake <br />
 Go to source folder and run 
 ```shell
 cmake

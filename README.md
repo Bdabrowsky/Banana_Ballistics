@@ -10,7 +10,7 @@ make
 ```
 
 ## Usage
-To use simulation you need to enter motor configuratio in configuration.json file. Then just run Banana_Ballistics executable.
+To use simulation you need to enter motor configuration in configuration.json file. Then just run Banana_Ballistics executable.
 
 ## Results
 Results will appear in .csv format as output.csv file, typical size depending on timestep is between 40-300MB.

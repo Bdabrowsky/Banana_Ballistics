@@ -4,12 +4,12 @@
         "grain_count": 6,
         "grains":
         [
-            {"diameter": 0.068, "length":0.125, "port_diameter":0.03, "propellant_type":"KNSB"},
-            {"diameter": 0.068, "length":0.125, "port_diameter":0.03, "propellant_type":"KNSB"},
-            {"diameter": 0.068, "length":0.125, "port_diameter":0.03, "propellant_type":"KNSB"},
-            {"diameter": 0.068, "length":0.125, "port_diameter":0.03, "propellant_type":"KNSB"},
-            {"diameter": 0.068, "length":0.125, "port_diameter":0.03, "propellant_type":"KNSB"},
-            {"diameter": 0.068, "length":0.125, "port_diameter":0.03, "propellant_type":"KNSB"}
+            {"diameter": 0.068, "length":0.125, "port_diameter":0.029, "propellant_type":"KNSB"},
+            {"diameter": 0.068, "length":0.125, "port_diameter":0.029, "propellant_type":"KNSB"},
+            {"diameter": 0.068, "length":0.125, "port_diameter":0.029, "propellant_type":"KNSB"},
+            {"diameter": 0.068, "length":0.125, "port_diameter":0.029, "propellant_type":"KNSB"},
+            {"diameter": 0.068, "length":0.125, "port_diameter":0.029, "propellant_type":"KNSB"},
+            {"diameter": 0.068, "length":0.125, "port_diameter":0.029, "propellant_type":"KNSB"}
         ],
 
         "nozzle":
@@ -22,6 +22,7 @@
             "buildup_coef": 0
         },
 
-        "correction_coeff": 0.92
+        "correction_coeff": 0.92,
+        "ignition_time": 0.0
     }
 }

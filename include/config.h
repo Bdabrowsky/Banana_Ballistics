@@ -14,10 +14,6 @@
 #define PI 3.141592
 
 
-//Ignition parameters
-#define ignition_time 1 // s
-
-
 //Enviroment parameters
 #define ambient_pressure 101300 // Pa
 

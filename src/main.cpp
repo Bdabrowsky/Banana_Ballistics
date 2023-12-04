@@ -24,12 +24,20 @@ motor mot;
 
 
 int main(){
-
+    ifstream temp("data/configuration.json");
+    json config = json::parse(temp);
+    temp.close();
    
     mot.init();
 
     for(double T=0;T<simulationLength;T+=dT){
-        mot.update();
+        if(T >= config.at("motor").at("ignition_time")){
+            mot.update();
+        }
+        else{
+            mot.update_transient(T);
+        }
+       
         if(mot.grains[0].web <= 0.001){
             break;
         }

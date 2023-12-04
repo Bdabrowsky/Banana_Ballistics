@@ -27,6 +27,8 @@ void grain::init(double len, double dia, double port_dia){
 
 void grain::update(double pressure){
 
+    prop.change_coefficients(pressure);
+    
     burn_rate = prop.a * pow(pressure, prop.n); //+ prop.alpha * pow(mass_flux, 0.8) * pow(length_initial, -0.2) * pow(e, ((-1.0) * prop.beta * prop.density * pressure) / mass_flux);
 
     port_diameter += 2.0 * burn_rate * dT;

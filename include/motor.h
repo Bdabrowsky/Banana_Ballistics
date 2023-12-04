@@ -28,10 +28,13 @@ class motor{
         double kn;
 
         double correction_coeff;
+        double ignition_time;
 
         void init();
 
         void update();
+
+        void update_transient(double T);
 
         void parse();
     

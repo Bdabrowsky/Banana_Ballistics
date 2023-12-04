@@ -28,11 +28,11 @@ void motor::init(){
         tempGrain.propellant_type = config.at("motor").at("grains").at(i).at("propellant_type");
         printf("%lf, %lf, %lf\n",tempGrain.diameter, tempGrain.length, tempGrain.port_diameter);
         tempGrain.init(tempGrain.length,  tempGrain.diameter,  tempGrain.port_diameter);
-        tempGrain.prop.init();
+        tempGrain.prop.init(tempGrain.propellant_type);
         grains.push_back(tempGrain);   
     }
     
-    pressure = 200000;
+    pressure = ambient_pressure * 1.25;
     for(unsigned long i=0;i<grains.size();i++){
         total_volume += grains[i].volume_initial;
     }
@@ -41,6 +41,7 @@ void motor::init(){
 
 
     correction_coeff = config.at("motor").at("correction_coeff");
+    ignition_time = config.at("motor").at("ignition_time");
 
     nozz.throat_diameter = config.at("motor").at("nozzle").at("throat_diameter");
     nozz.expansion_ratio = config.at("motor").at("nozzle").at("expansion_ratio");
@@ -53,6 +54,70 @@ void motor::init(){
         volume += grains[i].length_initial * grains[i].diameter * grains[i].diameter * PI / 4.0;
     }
 
+    temp.close();
+}
+
+void motor::update_transient(double T){
+    double temp_volume = 0.0;
+    double temp_area = 0.0;
+
+    
+    for(auto i=0;i<grains.size();i++){
+        grains[i].update(pressure);
+        if(i>0){
+            grains[i].mass_flow = grains[i-1].mass_flow;
+        }
+        else{
+            grains[i].mass_flow = 0;
+        }
+       
+        
+
+        temp_volume += grains[i].volume;
+        temp_area += grains[i].area;
+    }
+   
+    temp_area *= T / ignition_time;
+
+    double free_volume = volume - temp_volume;
+    double throat_area = (nozz.throat_diameter * nozz.throat_diameter * PI) / 4.0;
+   
+
+    double delta = grains[0].prop.density * (gas_constant / grains[0].prop.exhaust_molar_mass) * grains[0].prop.combustion_temp * temp_area * grains[0].prop.a * pow(pressure, grains[0].prop.n);
+
+    delta -= (grains[0].prop.tau * pressure * throat_area * sqrt((gas_constant/grains[0].prop.exhaust_molar_mass) * grains[0].prop.combustion_temp));
+
+    delta *= dT/free_volume;
+   
+
+    pressure += delta;
+    
+    double a = (2.0 * grains[0].prop.specific_heat_ratio * grains[0].prop.specific_heat_ratio) /  (grains[0].prop.specific_heat_ratio - 1.0);
+    double b = pow((2.0 / (grains[0].prop.specific_heat_ratio + 1.0)), (grains[0].prop.specific_heat_ratio + 1.0) / (grains[0].prop.specific_heat_ratio - 1.0) );
+    double c = 1.0 - pow(pressure_exit / pressure, (grains[0].prop.specific_heat_ratio - 1.0) / grains[0].prop.specific_heat_ratio);
+
+    thrust = correction_coeff * throat_area * pressure * sqrt(a * b * c) + (pressure_exit - ambient_pressure) * throat_area * nozz.expansion_ratio;
+    thrust_coeffcient = sqrt(a * b * c) + ((pressure_exit - ambient_pressure) * throat_area * nozz.expansion_ratio) / (pressure * throat_area);
+
+    impulse += thrust * dT;
+
+    kn = temp_area / throat_area;
+
+    if(pressure >= max_pressure){
+        max_pressure = pressure;
+    }
+    
+    ofstream temp("output.csv", ios::out | std::ofstream::app);
+    temp << setprecision(5) << pressure/1000000.0 << ",";
+    temp << setprecision(5) << thrust << ",";
+    for(auto i=0;i<grains.size();i++){
+        temp << setprecision(5) << grains[i].web << ",";
+        temp << setprecision(5) << grains[i].mass_flow << ",";
+        temp << setprecision(5) << grains[i].mass_flux << ",";
+    }
+    temp << setprecision(5) << kn << ",";
+    temp << setprecision(5) << grains[0].burn_rate << "\n";
+    
     temp.close();
 }
 

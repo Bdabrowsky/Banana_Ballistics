@@ -1,6 +1,8 @@
 #pragma once
 
+#include <string>
 
+using namespace std;
 
 class propellant{
     public:
@@ -18,6 +20,8 @@ class propellant{
         double max_pressure;
         double min_pressure;
 
-        void init();
-       
+        string type;
+
+        void init(string str);
+        void change_coefficients(double pressure);
 };

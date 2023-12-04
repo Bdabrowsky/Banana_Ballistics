@@ -82,6 +82,7 @@
         "valarray": "cpp",
         "numeric": "cpp",
         "random": "cpp",
-        "ranges": "cpp"
+        "ranges": "cpp",
+        "math.h": "c"
     }
 }

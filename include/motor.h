@@ -20,6 +20,7 @@ class motor{
         double pressure_exit;
         double thrust;
         double thrust_coeffcient;
+        double last_valid_thrust;
 
         double impulse;
         double specific_impulse;

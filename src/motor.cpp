@@ -172,9 +172,15 @@ void motor::update(){
     double c = 1.0 - pow(pressure_exit / pressure, (grains[0].prop.specific_heat_ratio - 1.0) / grains[0].prop.specific_heat_ratio);
 
     thrust = correction_coeff * throat_area * pressure * sqrt(a * b * c) + (pressure_exit - ambient_pressure) * throat_area * nozz.expansion_ratio;
+    if(!isnan(thrust)){
+        last_valid_thrust = thrust;
+        impulse += thrust * dT;
+    }
+    else{
+        thrust = last_valid_thrust;
+    }
     thrust_coeffcient = sqrt(a * b * c) + ((pressure_exit - ambient_pressure) * throat_area * nozz.expansion_ratio) / (pressure * throat_area);
 
-    impulse += thrust * dT;
 
     kn = temp_area / throat_area;
 

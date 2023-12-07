@@ -29,7 +29,7 @@
     "specific_heat_ratio": 1.14,
     "combustion_temp": 3250,
     "exhaust_molar_mass": 26.90,
-    "a": 0.0000055,
+    "a": 0.000055,
     "n": 0.35,
     "alpha": 0.0,
     "beta": 0.0,
@@ -38,7 +38,7 @@
     "range_count": 1,
     "ranges":
     [
-      {"low": 0.103425, "high": -1, "a": 0.0000055, "n": 0.35}      
+      {"low": 0.01, "high": -1, "a": 0.000055, "n": 0.35}      
     ]
   },
 
@@ -48,7 +48,7 @@
     "specific_heat_ratio": 1.1989,
     "combustion_temp":2280,
     "exhaust_molar_mass": 26.573,
-    "a": 0.0000032,
+    "a": 0.000032,
     "n": 0.46,
     "alpha": 0.0,
     "beta": 0.0,
@@ -57,7 +57,7 @@
     "range_count": 1,
     "ranges":
     [
-      {"low": 0.103425, "high": -1, "a": 0.0000032, "n": 0.46}      
+      {"low": 0.103425, "high": -1, "a": 0.000032, "n": 0.46}      
     ]
   }
 }

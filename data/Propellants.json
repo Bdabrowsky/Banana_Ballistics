@@ -61,42 +61,32 @@
     ]
   },
 
-  "Vela_monoprop":
+  "H2O2_100":
   {
-    "density": 1757.0,
-    "specific_heat_ratio": 1.1989,
-    "combustion_temp":2280,
-    "exhaust_molar_mass": 26.573,
-    "a": 0.000032,
-    "n": 0.46,
-    "alpha": 0.0,
-    "beta": 0.0,
+    "density": 1450,
+    "specific_heat_ratio": -1,
+    "combustion_temp":-1,
+    "exhaust_molar_mass": 34.014,
+    "a": -1,
+    "n": -1,
+    "alpha": -1,
+    "beta": -1,
     "max_pressure": 10,
     "min_pressure": 1.5,
-    "range_count": 1,
-    "ranges":
-    [
-      {"low": 0.103425, "high": -1, "a": 0.000032, "n": 0.46}      
-    ]
   },
 
-  "Vela":
+  "Isopropanol":
   {
-    "density": 1757.0,
-    "specific_heat_ratio": 1.1989,
-    "combustion_temp":2280,
-    "exhaust_molar_mass": 26.573,
-    "a": 0.000032,
-    "n": 0.46,
-    "alpha": 0.0,
-    "beta": 0.0,
+    "density": 786,
+    "specific_heat_ratio": -1,
+    "combustion_temp": -1,
+    "exhaust_molar_mass": 60.096,
+    "a": -1,
+    "n": -1,
+    "alpha": -1,
+    "beta": -1,
     "max_pressure": 10,
-    "min_pressure": 1.5,
-    "range_count": 1,
-    "ranges":
-    [
-      {"low": 0.103425, "high": -1, "a": 0.000032, "n": 0.46}      
-    ]
+    "min_pressure": 1.5
   }
 
 }

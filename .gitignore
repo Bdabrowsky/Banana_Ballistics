@@ -2,4 +2,4 @@ build/
 /Makefile
 /Banana_Ballistics
 /output
-output.csv
+/biprop_output.csv

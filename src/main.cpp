@@ -43,6 +43,9 @@ int main(){
         #ifdef solid_motor
             ofstream temp("solid_output.csv", ios::out | std::ofstream::app);
         #endif
+        #ifdef hybrid_motor
+            ofstream temp("hybrid_output.csv", ios::out | std::ofstream::app);
+        #endif
         temp << T << ",";
         temp.close();
     }

@@ -157,10 +157,6 @@ void motor::update(){
     delta -= (grains[0].prop.tau * pressure * throat_area * sqrt((gas_constant/grains[0].prop.exhaust_molar_mass) * grains[0].prop.combustion_temp));
 
     delta *= dT/free_volume;
-   
-    //For steady state
-    //double temp = pow((grains[0].prop.a * grains[0].prop.density) / sqrt(grains[0].prop.specific_heat_ratio / (gas_constant/grains[0].prop.exhaust_molar_mass * grains[0].prop.combustion_temp) * pow(2.0 / (grains[0].prop.specific_heat_ratio + 1.0), (grains[0].prop.specific_heat_ratio + 1.0) / (grains[0].prop.specific_heat_ratio - 1.0))), 1.0 / (1.0 - grains[0].prop.n));
-
 
     pressure += delta;
     
@@ -171,19 +167,15 @@ void motor::update(){
     thrust = correction_coeff * throat_area * pressure * sqrt(a * b * c) + (pressure_exit - ambient_pressure) * throat_area * nozz.expansion_ratio;
     if(!isnan(thrust)){
         last_valid_thrust = thrust;
-        impulse += thrust * dT;
     }
     else{
         thrust = last_valid_thrust;
     }
+    impulse += thrust * dT;
     thrust_coeffcient = sqrt(a * b * c) + ((pressure_exit - ambient_pressure) * throat_area * nozz.expansion_ratio) / (pressure * throat_area);
 
 
     kn = temp_area / throat_area;
-
-    //For steady state
-    //pressure = temp * pow(kn, 1.0 / (1.0 - grains[0].prop.n));
-
 
     if(pressure >= max_pressure){
         max_pressure = pressure;
@@ -229,7 +221,7 @@ void motor::parse(){
 
 
 // 
-// Liquid rocket engine
+// Bipropellant rocket engine
 //
 
 
@@ -269,6 +261,10 @@ void biprop_engine::init(){
     nozzle_d.buildup_coef = config.at("motor").at("nozzle").at("buildup_coef");
 
     temp.close();
+
+    ofstream temp("biprop_output.csv", ios::out | std::ofstream::app);
+    temp << "Time, Chamber_pressure, Thrust, Total_mass_flow, Oxidizer_mass_flow, Fuel_mass_flow, Oxidizer_mass, Fuel_mass" << "\n";
+    temp.close();
 }
 
 void biprop_engine::update_transient(double T){
@@ -279,9 +275,7 @@ void biprop_engine::update_transient(double T){
 }
 
 void biprop_engine::update(){
-
-    double temp_volume = 0.0;
-    double temp_area = 0.0;  
+ 
     double throat_area = (nozzle_d.throat_diameter * nozzle_d.throat_diameter * PI) / 4.0;
 
     //Termochemical equation for liquids
@@ -294,12 +288,13 @@ void biprop_engine::update(){
 
     double total_mass_flow = oxidizer_tank.mass_flow + fuel_tank.mass_flow;
     double OF = oxidizer_tank.mass_flow / fuel_tank.mass_flow;
-    printf("Total mass flow %0.2lf \n", total_mass_flow);
-    printf("OF %0.2lf \n", OF);
+    
+    //printf("Total mass flow %0.2lf \n", total_mass_flow);
+    //printf("OF %0.2lf \n", OF);
 
     double dP = gas_constant/1000.0 * prop.combustion_temp / volume * total_mass_flow - pressure * (throat_area/volume * sqrt(prop.specific_heat_ratio * gas_constant * pow(2.0/(prop.specific_heat_ratio + 1),(prop.specific_heat_ratio+1)/(prop.specific_heat_ratio-1))));
     
-    
+
     //printf("dP/dT %0.2lf Pa/s \n", dP);
     //printf("Pressure %0.2lf Pa \n", pressure);
 
@@ -321,6 +316,8 @@ void biprop_engine::update(){
     temp << setprecision(5) << pressure/1000000.0 << ",";
     temp << setprecision(5) << thrust << ",";
     temp << setprecision(5) << total_mass_flow << ",";
+    temp << setprecision(5) << oxidizer_tank.mass_flow << ",";
+    temp << setprecision(5) << fuel_tank.mass_flow << ",";
     temp << setprecision(5) << oxidizer_tank.propellant_mass << ",";
     temp << setprecision(5) << fuel_tank.propellant_mass << "\n";
     temp.close();
@@ -330,12 +327,10 @@ void biprop_engine::update(){
 void biprop_engine::parse(){
 
     double total_propellant_mass = oxidizer_tank.volume * oxidizer_tank.propellant.density + fuel_tank.volume * fuel_tank.propellant.density;
-    
     specific_impulse = impulse / (total_propellant_mass * gravity);
+
     printf("Impulse: %0.2lf Ns\n", impulse);
     printf("Peak pressure: %0.2lf MPa \n", max_pressure/1000000.0);
-    double mx=0.0;
-    printf("Peak mass flux: %0.2lf kg/m^s-s\n", mx);
     printf("Propellant mass: %lf\n", total_propellant_mass);
     printf("Isp: %0.1lf s \n", specific_impulse);
 

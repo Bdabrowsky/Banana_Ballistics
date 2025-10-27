@@ -20,7 +20,7 @@ using namespace std;
 
 
 
-motor mot;
+biprop_engine mot;
 
 
 int main(){
@@ -31,18 +31,18 @@ int main(){
     mot.init();
 
     for(double T=0;T<simulationLength;T+=dT){
-        if(T >= config.at("motor").at("ignition_time")){
-            mot.update();
-        }
-        else{
-            mot.update_transient(T);
-        }
+        mot.update();
        
-        if(mot.grains[0].web <= 0.001){
+        if(mot.oxidizer_tank.propellant_mass <=0){
             break;
         }
 
-        ofstream temp("output.csv", ios::out | std::ofstream::app);
+        #ifdef bipropellant_engine
+            ofstream temp("biprop_output.csv", ios::out | std::ofstream::app);
+        #endif
+        #ifdef solid_motor
+            ofstream temp("solid_output.csv", ios::out | std::ofstream::app);
+        #endif
         temp << T << ",";
         temp.close();
     }

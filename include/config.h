@@ -1,6 +1,6 @@
 #pragma once
 
-#define dT 0.0001 //Timestep in s
+#define dT 0.001 //Timestep in s
 #define simulationLength 10.0 //Simulation length in s
 
 
@@ -15,5 +15,6 @@
 
 
 //Enviroment parameters
-#define ambient_pressure 101300 // Pa
+#define ambient_pressure 101325 // Pa
 
+#define bipropellant_engine

@@ -83,6 +83,8 @@
         "numeric": "cpp",
         "random": "cpp",
         "ranges": "cpp",
-        "math.h": "c"
+        "math.h": "c",
+        "charconv": "cpp",
+        "execution": "cpp"
     }
 }

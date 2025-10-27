@@ -25,3 +25,19 @@ class propellant{
         void init(string str);
         void change_coefficients(double pressure);
 };
+
+class liquid_propellant{
+    public:
+        double density;
+        double specific_heat_ratio;
+        double combustion_temp;
+        double exhaust_molar_mass;
+        double tau;
+
+        double max_pressure;
+        double min_pressure;
+
+        string type;
+
+        void init(string str);
+};

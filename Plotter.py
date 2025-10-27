@@ -7,6 +7,8 @@ import os
 x = []
 F = []
 P = []
+Kn = []
+
 
 
 
@@ -28,8 +30,11 @@ with open("output.csv", 'r') as csvfile:
             x.append(float(row[0]))
             P.append(float(row[1]))
             F.append(float(row[2]))
+            Kn.append(float(row[-2]))
+
             impulse = impulse + float(row[2]) * (float(row[0]) - prevtime)
             prevtime = float(row[0])
+
 
     
 
@@ -50,7 +55,12 @@ ax2.set_ylabel('Pressure [MPa]', color='b')  # we already handled the x-label wi
 ax2.tick_params(axis='y', labelcolor='b')
 
 ax1.plot(x, F, color='y')
+ax1.plot(x, Kn, color='g')
 ax2.plot(x, P, color='b')
+
+ax1.legend(['Force', 'Kn'], loc='upper left')  # Add legend for axes
+ax2.legend(['Pressure'], loc='upper right')  # Add legend for axes
+
 
 print("impulse")
 

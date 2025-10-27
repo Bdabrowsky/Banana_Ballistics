@@ -55,3 +55,21 @@ void propellant::change_coefficients(double pressure){
 
     temp.close();
 }
+
+void liquid_propellant::init(string str){
+
+    ifstream temp("data/Propellants.json");
+    json propellants = json::parse(temp);
+
+    //cout << setw(4) << propellants << '\n';
+    type = str;
+    density = propellants.at(str).at("density");
+    specific_heat_ratio = propellants.at(str).at("specific_heat_ratio");
+    combustion_temp = propellants.at(str).at("combustion_temp");
+    exhaust_molar_mass = propellants.at(str).at("exhaust_molar_mass");
+    max_pressure = propellants.at(str).at("max_pressure");
+    min_pressure = propellants.at(str).at("min_pressure");
+
+    temp.close();
+        
+}

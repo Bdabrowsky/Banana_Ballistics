@@ -224,7 +224,6 @@ void motor::parse(){
 // Bipropellant rocket engine
 //
 
-
 void biprop_engine::init(){
     ifstream temp("data/configuration.json");
     json config = json::parse(temp);
@@ -262,9 +261,9 @@ void biprop_engine::init(){
 
     temp.close();
 
-    ofstream temp("biprop_output.csv", ios::out | std::ofstream::app);
-    temp << "Time, Chamber_pressure, Thrust, Total_mass_flow, Oxidizer_mass_flow, Fuel_mass_flow, Oxidizer_mass, Fuel_mass" << "\n";
-    temp.close();
+    ofstream temp_1("biprop_output.csv", ios::out | std::ofstream::app);
+    temp_1 << "Time, Chamber_pressure, Thrust, Total_mass_flow, Oxidizer_mass_flow, Fuel_mass_flow, Oxidizer_mass, Fuel_mass" << "\n";
+    temp_1.close();
 }
 
 void biprop_engine::update_transient(double T){
@@ -291,17 +290,29 @@ void biprop_engine::update(){
     
     //printf("Total mass flow %0.2lf \n", total_mass_flow);
     //printf("OF %0.2lf \n", OF);
-
-    double dP = gas_constant/1000.0 * prop.combustion_temp / volume * total_mass_flow - pressure * (throat_area/volume * sqrt(prop.specific_heat_ratio * gas_constant * pow(2.0/(prop.specific_heat_ratio + 1),(prop.specific_heat_ratio+1)/(prop.specific_heat_ratio-1))));
     
 
+    double dP = (gas_constant/prop.exhaust_molar_mass) * prop.combustion_temp / volume * total_mass_flow;
+    double a = 2 / (prop.specific_heat_ratio + 1);
+    double b = (prop.specific_heat_ratio + 1) / (prop.specific_heat_ratio -1);
+   
+    if(oxidizer_tank.mass_flow == 0 || fuel_tank.mass_flow == 0){
+        dP = 0;
+    }
+    dP -= pressure * throat_area / volume * sqrt(prop.specific_heat_ratio * (gas_constant/prop.exhaust_molar_mass) * prop.combustion_temp * pow(a,b));
+
+    thrust_coeffcient = (2 * pow(prop.specific_heat_ratio,2)) / (prop.specific_heat_ratio - 1);
+    thrust_coeffcient *= pow(2 / (prop.specific_heat_ratio + 1), (prop.specific_heat_ratio + 1 ) / (prop.specific_heat_ratio - 1));
+    thrust_coeffcient *= 1 - pow(ambient_pressure / pressure, (prop.specific_heat_ratio - 1)/ prop.specific_heat_ratio);
+    thrust_coeffcient = sqrt(thrust_coeffcient);
+    //printf("Thrust coefficient %0.2lf \n", thrust_coeffcient);
     //printf("dP/dT %0.2lf Pa/s \n", dP);
     //printf("Pressure %0.2lf Pa \n", pressure);
-
-
+    characteristic_velocity = pressure * throat_area / total_mass_flow;
+    //printf("Charactersitis velocity %0.2lf m/s \n", characteristic_velocity);
 
     pressure += dP * dT;
-    thrust = pressure * throat_area * 1.38;
+    thrust = pressure * throat_area * thrust_coeffcient;
 
     if(!isnan(thrust)){
         last_valid_thrust = thrust;
@@ -309,8 +320,10 @@ void biprop_engine::update(){
     else{
         thrust = last_valid_thrust;
     }
+
     impulse += thrust * dT;
-    
+    max_pressure = max(pressure, max_pressure);
+    max_thrust = max(thrust, max_thrust);
    
     ofstream temp("biprop_output.csv", ios::out | std::ofstream::app);
     temp << setprecision(5) << pressure/1000000.0 << ",";
@@ -326,11 +339,12 @@ void biprop_engine::update(){
 
 void biprop_engine::parse(){
 
-    double total_propellant_mass = oxidizer_tank.volume * oxidizer_tank.propellant.density + fuel_tank.volume * fuel_tank.propellant.density;
+    double total_propellant_mass = oxidizer_tank.volume * oxidizer_tank.propellant.density - oxidizer_tank.propellant_mass + fuel_tank.volume * fuel_tank.propellant.density - fuel_tank.propellant_mass;
     specific_impulse = impulse / (total_propellant_mass * gravity);
 
     printf("Impulse: %0.2lf Ns\n", impulse);
     printf("Peak pressure: %0.2lf MPa \n", max_pressure/1000000.0);
+    printf("Peak thrust: %0.2lf N \n", max_thrust);
     printf("Propellant mass: %lf\n", total_propellant_mass);
     printf("Isp: %0.1lf s \n", specific_impulse);
 

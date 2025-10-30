@@ -33,7 +33,7 @@ int main(){
     for(double T=0;T<simulationLength;T+=dT){
         mot.update();
        
-        if(mot.oxidizer_tank.propellant_mass <=0){
+        if(mot.oxidizer_tank.propellant_mass <= 0 && mot.fuel_tank.propellant_mass <= 0){
             break;
         }
 

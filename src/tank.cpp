@@ -12,6 +12,11 @@ void tank::init(){
 
 void tank::update(double downstream_pressure){
 
-    mass_flow = Cd * reference_area * sqrt(2 * propellant.density * (pressure - downstream_pressure));
-    propellant_mass -= mass_flow * dT;
+    if(propellant_mass <= 0){
+        mass_flow = 0;
+    }
+    else{
+        mass_flow = Cd * reference_area * sqrt(2 * propellant.density * (pressure - downstream_pressure));
+        propellant_mass -= mass_flow * dT;
+    } 
 }

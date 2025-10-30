@@ -12,7 +12,7 @@
         {
             "throat_diameter": 0.01,
             "expansion_ratio": 4,
-            "angle_div": 17,
+            "angle_div": 14,
             "angle_conv": 60,
             "erosion_coef": 0,
             "buildup_coef": 0
@@ -30,16 +30,16 @@
             "pressure": 6000000,
             "Cd": 0.42,
             "reference_area": 0.00000855298,
-            "propellant_type":"Vela"
+            "propellant_type":"H2O2_100"
         },
 
          "fuel_tank":
         {
-            "volume": 0.00015,
+            "volume": 0.0004,
             "pressure": 6000000,
             "Cd": 0.42,
             "reference_area": 0.00000255298,
-            "propellant_type":"Vela"
+            "propellant_type":"Isopropanol"
         },
         
         "propellant_type":"Vela",

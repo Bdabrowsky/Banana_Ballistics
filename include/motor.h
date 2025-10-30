@@ -58,10 +58,12 @@ class biprop_engine{
         double thrust;
         double thrust_coeffcient;
         double last_valid_thrust;
+        double characteristic_velocity;
 
         double impulse;
         double specific_impulse;
         double max_pressure;
+        double max_thrust;
 
         double correction_coeff;
         double ignition_time;

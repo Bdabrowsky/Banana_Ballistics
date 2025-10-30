@@ -22,7 +22,7 @@ cnt = 0
 impulse = 0
 prevtime = 0
 
-with open("biprop_outpur.csv", 'r') as csvfile:
+with open("biprop_output.csv", 'r') as csvfile:
     lines = csv.reader(csvfile, delimiter=',')
     for row in lines:
         cnt = cnt + 1

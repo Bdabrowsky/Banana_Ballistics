@@ -72,7 +72,7 @@
     "alpha": -1,
     "beta": -1,
     "max_pressure": 10,
-    "min_pressure": 1.5,
+    "min_pressure": 1.5
   },
 
   "Isopropanol":
@@ -87,6 +87,21 @@
     "beta": -1,
     "max_pressure": 10,
     "min_pressure": 1.5
+  },
+
+  "Vela":
+  {
+    "density": 1231.0,
+    "specific_heat_ratio": 1.1808,
+    "combustion_temp":2908,
+    "exhaust_molar_mass": 22.186,
+    "a": -1,
+    "n": -1,
+    "alpha": -1,
+    "beta": -1,
+    "max_pressure": 10,
+    "min_pressure": 0
   }
+
 
 }

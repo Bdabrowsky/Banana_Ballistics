@@ -232,6 +232,7 @@ void biprop_engine::init(){
     pressure_exit = ambient_pressure;
 
     volume = config.at("biprop_engine").at("volume");
+    ignition_time = config.at("biprop_engine").at("ignition_time");
    
     oxidizer_tank.volume = config.at("biprop_engine").at("oxidizer_tank").at("volume");
     oxidizer_tank.pressure = config.at("biprop_engine").at("oxidizer_tank").at("pressure");
@@ -249,8 +250,7 @@ void biprop_engine::init(){
     oxidizer_tank.init();
     fuel_tank.init();
     
-    correction_coeff = config.at("motor").at("correction_coeff");
-    ignition_time = config.at("motor").at("ignition_time");
+    correction_coeff = config.at("biprop_engine").at("correction_coeff");
 
     nozzle_d.throat_diameter = config.at("motor").at("nozzle").at("throat_diameter");
     nozzle_d.expansion_ratio = config.at("motor").at("nozzle").at("expansion_ratio");
@@ -261,8 +261,12 @@ void biprop_engine::init(){
 
     temp.close();
 
+    oxidizer_tank.propellant_valve.actutation_time = 3;
+    fuel_tank.propellant_valve.actutation_time = 0.05;
+
+
     ofstream temp_1("biprop_output.csv", ios::out | std::ofstream::app);
-    temp_1 << "Time, Chamber_pressure, Thrust, Total_mass_flow, Oxidizer_mass_flow, Fuel_mass_flow, Oxidizer_mass, Fuel_mass" << "\n";
+    temp_1 << "Time, Chamber_pressure, Thrust, Total_mass_flow, Oxidizer_mass_flow, Fuel_mass_flow, Oxidizer_mass, Fuel_mass, Isp" << "\n";
     temp_1.close();
 }
 
@@ -273,7 +277,7 @@ void biprop_engine::update_transient(double T){
     
 }
 
-void biprop_engine::update(){
+void biprop_engine::update(double T){
  
     double throat_area = (nozzle_d.throat_diameter * nozzle_d.throat_diameter * PI) / 4.0;
 
@@ -282,23 +286,47 @@ void biprop_engine::update(){
         pressure = ambient_pressure;
     }
 
-    oxidizer_tank.update(pressure);
-    fuel_tank.update(pressure);
-
-    double total_mass_flow = oxidizer_tank.mass_flow + fuel_tank.mass_flow;
-    double OF = oxidizer_tank.mass_flow / fuel_tank.mass_flow;
     
-    //printf("Total mass flow %0.2lf \n", total_mass_flow);
+    double total_mass_flow = 0;
+    double OF = 0;
+   
     //printf("OF %0.2lf \n", OF);
+    if(T >= ignition_time){
+        /*prop.init("Vela");
+        oxidizer_tank.update(pressure);
+        fuel_tank.update(pressure);
+        total_mass_flow = fuel_tank.mass_flow + oxidizer_tank.mass_flow;
+
+        if(fuel_tank.propellant_mass <= 0){
+             prop.init("H2O2_100_decomposed");
+        }*/
+    }
+    else{
+       /* oxidizer_tank.update(pressure);
+        fuel_tank.update(fuel_tank.pressure);
+        total_mass_flow = oxidizer_tank.mass_flow;
+        */
+    }
+    fuel_tank.update(pressure);
+    oxidizer_tank.update(pressure);
+    total_mass_flow = fuel_tank.mass_flow + oxidizer_tank.mass_flow;
+
+    if(fuel_tank.mass_flow == 0){
+        prop.init("H2O2_100_decomposed");
+    }
+    else{
+        prop.init("Vela");
+    }
+    
+
+    OF = oxidizer_tank.mass_flow / fuel_tank.mass_flow;
     
 
     double dP = (gas_constant/prop.exhaust_molar_mass) * prop.combustion_temp / volume * total_mass_flow;
     double a = 2 / (prop.specific_heat_ratio + 1);
     double b = (prop.specific_heat_ratio + 1) / (prop.specific_heat_ratio -1);
    
-    if(oxidizer_tank.mass_flow == 0 || fuel_tank.mass_flow == 0){
-        dP = 0;
-    }
+    
     dP -= pressure * throat_area / volume * sqrt(prop.specific_heat_ratio * (gas_constant/prop.exhaust_molar_mass) * prop.combustion_temp * pow(a,b));
 
     thrust_coeffcient = (2 * pow(prop.specific_heat_ratio,2)) / (prop.specific_heat_ratio - 1);
@@ -311,7 +339,10 @@ void biprop_engine::update(){
     characteristic_velocity = pressure * throat_area / total_mass_flow;
     //printf("Charactersitis velocity %0.2lf m/s \n", characteristic_velocity);
 
-    pressure += dP * dT;
+    
+    pressure += (dP * damping + (1.0 - damping) * previous_dP) * dT;
+    previous_dP = dP;
+    
     thrust = pressure * throat_area * thrust_coeffcient;
 
     if(!isnan(thrust)){
@@ -324,6 +355,7 @@ void biprop_engine::update(){
     impulse += thrust * dT;
     max_pressure = max(pressure, max_pressure);
     max_thrust = max(thrust, max_thrust);
+    double isp = thrust / total_mass_flow / gravity;
    
     ofstream temp("biprop_output.csv", ios::out | std::ofstream::app);
     temp << setprecision(5) << pressure/1000000.0 << ",";
@@ -332,7 +364,8 @@ void biprop_engine::update(){
     temp << setprecision(5) << oxidizer_tank.mass_flow << ",";
     temp << setprecision(5) << fuel_tank.mass_flow << ",";
     temp << setprecision(5) << oxidizer_tank.propellant_mass << ",";
-    temp << setprecision(5) << fuel_tank.propellant_mass << "\n";
+    temp << setprecision(5) << fuel_tank.propellant_mass << ",";
+    temp << setprecision(5) << isp << "\n";
     temp.close();
 
 }

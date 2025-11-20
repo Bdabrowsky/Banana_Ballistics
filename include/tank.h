@@ -1,6 +1,7 @@
 #pragma once
 
-#include"propellant.h"
+#include "propellant.h"
+#include "valve.h"
 
 #include <string>
 
@@ -19,6 +20,7 @@ class tank{
         double propellant_mass;
 
         propellant propellant;
+        valve propellant_valve;
 
         
         void init();

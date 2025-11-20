@@ -19,30 +19,32 @@
         },
 
         "correction_coeff": 0.89,
-        "ignition_time": 0.20
+        "ignition_time": 0.2
     },
 
     "biprop_engine":
     {
         "oxidizer_tank":
         {
-            "volume": 0.0008,
+            "volume": 0.003,
             "pressure": 6000000,
-            "Cd": 0.42,
+            "Cd": 0.09,
             "reference_area": 0.00000855298,
             "propellant_type":"H2O2_100"
         },
 
          "fuel_tank":
         {
-            "volume": 0.0004,
+            "volume": 0.001,
             "pressure": 6000000,
-            "Cd": 0.42,
+            "Cd": 0.09,
             "reference_area": 0.00000255298,
             "propellant_type":"Isopropanol"
         },
         
-        "propellant_type":"Vela",
-        "volume": 0.0002
+        "propellant_type":"H2O2_100_decomposed",
+        "correction_coeff": 0.89,
+        "volume": 0.0002,
+        "ignition_time": 0.0
     }
 }

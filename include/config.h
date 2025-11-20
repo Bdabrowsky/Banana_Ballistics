@@ -1,8 +1,8 @@
 #pragma once
 
-#define dT 0.001 //Timestep in s
-#define simulationLength 10.0 //Simulation length in s
-
+#define dT 0.005 //Timestep in s
+#define simulationLength 35 //Simulation length in s
+#define burnout_time 0.9;
 
 #define radToDeg 57.2957795
 #define degToRad 0.0174532925
@@ -18,3 +18,5 @@
 #define ambient_pressure 101325 // Pa
 
 #define bipropellant_engine
+
+#define damping 1

@@ -5,6 +5,7 @@
 #include "grain.h"
 #include "tank.h"
 #include "nozzle.h"
+#include "valve.h"
 
 using namespace std;
 
@@ -50,6 +51,9 @@ class biprop_engine{
         tank oxidizer_tank;
         tank fuel_tank;
 
+        valve oxidizer_valve;
+        valve fuel_valve;
+
         propellant prop;
 
         double pressure;
@@ -68,9 +72,12 @@ class biprop_engine{
         double correction_coeff;
         double ignition_time;
 
+
+        double previous_dP;
+        
         void init();
 
-        void update();
+        void update(double T);
 
         void update_transient(double T);
 

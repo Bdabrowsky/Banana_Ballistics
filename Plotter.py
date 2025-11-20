@@ -1,67 +1,47 @@
+import pandas as pd
 import matplotlib.pyplot as plt
-import csv
-import os
 
+# Read the CSV file
+df = pd.read_csv("biprop_output.csv")
 
-# Plotting variables
-x = []
-F = []
-P = []
-Kn = []
+# Strip any extra spaces from column names
+df.columns = df.columns.str.strip()
 
+# Check columns (optional debug)
+print("Columns:", df.columns.tolist())
 
+# Create figure and subplots
+fig, axs = plt.subplots(2, 2, figsize=(16, 8), sharex=False)
 
+# Plot 1: Thrust and Chamber Pressure
+axs[0][0].plot(df["Time"], df["Thrust"], label="Thrust (N)")
+axs[0][0].plot(df["Time"], df["Chamber_pressure"]*100.0, label="Chamber Pressure * 100 (MPa)")
+axs[0][0].set_ylabel("Thrust / Pressure")
+axs[0][0].set_title("Rocket Engine Test Data Over Time")
+axs[0][0].legend()
+axs[0][0].grid(True)
 
-# File system
-fileList = os.listdir()
-csvList = []
+# Plot 2: Mass Flow Rates
+axs[1][0].plot(df["Time"], df["Total_mass_flow"], label="Total Mass Flow (kg/s)")
+axs[1][0].plot(df["Time"], df["Oxidizer_mass_flow"], label="Oxidizer Mass Flow (kg/s)")
+axs[1][0].plot(df["Time"], df["Fuel_mass_flow"], label="Fuel Mass Flow (kg/s)")
+axs[1][0].set_ylabel("Mass Flow (kg/s)")
+axs[1][0].legend()
+axs[1][0].grid(True)
 
+# Plot 3: Remaining Mass
+axs[0][1].plot(df["Time"], df["Oxidizer_mass"], label="Oxidizer Mass (kg)")
+axs[0][1].plot(df["Time"], df["Fuel_mass"], label="Fuel Mass (kg)")
+axs[0][1].set_ylabel("Mass (kg)")
+axs[0][1].legend()
+axs[0][1].grid(True)
 
-cnt = 0
+# Plot 4: Specific Impulse
+axs[1][1].plot(df["Time"], df["Isp"], label="Specific Impulse (s)", color="tab:purple")
+axs[1][1].set_xlabel("Time (s)")
+axs[1][1].set_ylabel("Isp (s)")
+axs[1][1].legend()
+axs[1][1].grid(True)
 
-impulse = 0
-prevtime = 0
-
-with open("biprop_output.csv", 'r') as csvfile:
-    lines = csv.reader(csvfile, delimiter=',')
-    for row in lines:
-        cnt = cnt + 1
-        if cnt > 5:
-            x.append(float(row[0]))
-            P.append(float(row[1]))
-            F.append(float(row[2]))
-    
-            impulse = impulse + float(row[2]) * (float(row[0]) - prevtime)
-            prevtime = float(row[0])
-
-
-    
-
-
-plt.style.use('dark_background')
-
-fig, ax1 = plt.subplots()
-ax2 = ax1.twinx()  # instantiate a second axes that shares the same x-axis
-
-ax1.set_xlabel('time [s]')
-ax1.grid(True)
-
-ax1.set_ylabel('Thrust [N]', color='y')
-ax1.tick_params(axis='y', labelcolor='y')
-#ax1.fill_between(x, F, 0, alpha=0.2, color='y')
-
-ax2.set_ylabel('Pressure [MPa]', color='b')  # we already handled the x-label with ax1
-ax2.tick_params(axis='y', labelcolor='b')
-
-ax1.plot(x, F, color='y')
-ax2.plot(x, P, color='b')
-
-ax1.legend(['Thrust'], loc='upper left')  # Add legend for axes
-ax2.legend(['Pressure'], loc='upper right')  # Add legend for axes
-
-
-print("impulse")
-
-
-fig.tight_layout()  # otherwise the right y-label is slightly clipped
+plt.tight_layout()
 plt.show()

@@ -93,8 +93,22 @@
   {
     "density": 1231.0,
     "specific_heat_ratio": 1.1808,
-    "combustion_temp":2908,
-    "exhaust_molar_mass": 22.186,
+    "combustion_temp":3208,
+    "exhaust_molar_mass": 20.186,
+    "a": -1,
+    "n": -1,
+    "alpha": -1,
+    "beta": -1,
+    "max_pressure": 10,
+    "min_pressure": 0
+  },
+
+  "H2O2_100_decomposed":
+  {
+    "density": 1300.0,
+    "specific_heat_ratio": 1.1808,
+    "combustion_temp":1200,
+    "exhaust_molar_mass": 34.186,
     "a": -1,
     "n": -1,
     "alpha": -1,

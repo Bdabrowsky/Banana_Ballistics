@@ -5,9 +5,12 @@
 #include<stdio.h>
 #include<stdio.h>
 
-void tank::init(){
+#include "valve.h"
 
+
+void tank::init(){
     propellant_mass = propellant.density * volume;   
+    
 }
 
 void tank::update(double downstream_pressure){
@@ -17,6 +20,7 @@ void tank::update(double downstream_pressure){
     }
     else{
         mass_flow = Cd * reference_area * sqrt(2 * propellant.density * (pressure - downstream_pressure));
+        mass_flow = propellant_valve.update(mass_flow);
         propellant_mass -= mass_flow * dT;
     } 
 }
